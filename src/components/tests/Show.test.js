@@ -32,23 +32,27 @@ test('renders same number of options seasons are passed in', ()=>{
     expect(seasonSelector).toHaveLength(2);
 });
 
-test('handleSelect is called when an season is selected', async () => {
-    // render(<Show show={testData} selectedSeason={'none'} />);
+test('handleSelect is called when an season is selected', () => {
+    const testHandleSelect = jest.fn();
+    render(<Show show={testData} selectedSeason={'none'} handleSelect={testHandleSelect} />);
 
-    // let episodes = screen.queryByTestId('episodes-container');
-    // expect(episodes).not.toBeInTheDocument();
+    let episodes = screen.queryByTestId('episodes-container');
+    expect(episodes).not.toBeInTheDocument();
 
-    // const seasonSelector = screen.getByLabelText(/select a season/i);
-    // userEvent.click(seasonSelector);
-    // expect(seasonSelector).toHaveLength(2);
-    // console.log(seasonSelector);
+    const seasonSelector = screen.getByLabelText(/select a season/i);
+    userEvent.selectOptions(seasonSelector, ['0']);
 
-    // const seasonOption = screen.getByText(/testSeasonName/i);
-    // userEvent.click(seasonOption);
-
-    // episodes = await screen.queryByTestId('episodes-container');
-    // expect(episodes).toBeInTheDocument();
-
+    expect(testHandleSelect).toBeCalled();
 });
 
-test('component renders when no seasons are selected and when rerenders with a season passed in', () => {});
+test('component renders when no seasons are selected and when rerenders with a season passed in', () => {
+    const { rerender } = render(<Show show={testData} selectedSeason={'none'} />);
+
+    let episodes = screen.queryByTestId('episodes-container');
+    expect(episodes).not.toBeInTheDocument();
+
+    rerender(<Show show={testData} selectedSeason={'0'} />)
+    episodes = screen.queryByTestId('episodes-container');
+    expect(episodes).toBeInTheDocument();
+
+});
