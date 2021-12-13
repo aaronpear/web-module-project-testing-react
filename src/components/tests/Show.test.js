@@ -5,13 +5,50 @@ import userEvent from '@testing-library/user-event';
 
 import Show from './../Show';
 
-test('renders without errors', ()=>{});
+const testData = {
+    name: 'testName',
+    summary: 'testSummary',
+    seasons: [{id: 0, name: 'testSeasonName', episodes: ['testEp1', 'testEp2', 'testEp3']}]
+}
 
-test('renders Loading component when prop show is null', () => {});
+test('renders without errors', ()=>{
+    render(<Show show={testData} selectedSeason={'none'} />);
+});
+
+test('renders Loading component when prop show is null', () => {
+    render(<Show show={null} />);
+
+    const loadText = screen.queryByTestId('loading-container')
+
+    expect(loadText).toHaveTextContent('Fetching data...');
+});
 
 
-test('renders same number of options seasons are passed in', ()=>{});
+test('renders same number of options seasons are passed in', ()=>{
+    render(<Show show={testData} selectedSeason={'none'} />);
 
-test('handleSelect is called when an season is selected', () => {});
+    const seasonSelector = screen.getByLabelText(/select a season/i);
+
+    expect(seasonSelector).toHaveLength(2);
+});
+
+test('handleSelect is called when an season is selected', async () => {
+    // render(<Show show={testData} selectedSeason={'none'} />);
+
+    // let episodes = screen.queryByTestId('episodes-container');
+    // expect(episodes).not.toBeInTheDocument();
+
+    // const seasonSelector = screen.getByLabelText(/select a season/i);
+    // userEvent.click(seasonSelector);
+    // expect(seasonSelector).toHaveLength(2);
+    // console.log(seasonSelector);
+
+    // const seasonOption = screen.getByText(/testSeasonName/i);
+    // userEvent.click(seasonOption);
+
+    // episodes = await screen.queryByTestId('episodes-container');
+    // expect(episodes).toBeInTheDocument();
+
+});
 
 test('component renders when no seasons are selected and when rerenders with a season passed in', () => {});
